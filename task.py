@@ -40,6 +40,14 @@ class Task:
     def __lt__(self, other: "Task") -> bool:
         """Returns true if self.date comes before other.date"""
         return self.date < other.date
+
+    def __ge__(self, other: "Task") -> bool:
+        """Returns true if self.date comes after other.date"""
+        return self.date >= other.date
+
+    def __le__(self, other: "Task") -> bool:
+        """Returns true if self.date comes before other.date"""
+        return self.date <= other.date
     def change_date(self, year: int, month: int, day: int, hour: int, minute: int, am_or_pm: str):
         """Changes the date of the task"""
         if am_or_pm == 'PM':

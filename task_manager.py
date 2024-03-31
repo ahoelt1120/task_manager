@@ -2,13 +2,13 @@ from task import Task
 """Contains task manager class"""
 
 class TaskManager:
-     """
-    Represents a task list that contains a list of task objects
+    """
+       Represents a task list that contains a list of task objects
 
-    Attributes
-    ----------
-        tasks: list[Task]
-           List of tasks in the tasklist
+       Attributes
+       ----------
+           tasks: list[Task]
+              List of tasks in the tasklist
 
     """
     def __init__(self):
@@ -18,6 +18,9 @@ class TaskManager:
     def __repr__(self):
         "Returns a string representation of task manager"
         return f"TaskManager()"
+
+    def __len__(self):
+        return len(self.tasks)
 
     def add_task(self, new_task: Task):
         """Adds a task to the task list"""
@@ -42,54 +45,71 @@ class TaskManager:
         for task in self.tasks:
             print(task)
 
-    def task_sort_time(self):
+    def task_quicksort(self, low, high):
         """Sort tasks by how close they need to be completed to by current date using quick sort"""
+
         # Sorting in place using quicksort algorithm
         if len(self.tasks) == 0 or len(self.tasks) == 1:
             return
 
-        # partition
-        low = 0
-        high = len(self.tasks) - 1
+        if low < high:
+            # Find pivot element such that
+            # element smaller than pivot are on the left
+            # element greater than pivot are on the right
+            pi = self.partition(low, high)
 
-        self.task_quicksort(low, high)
+            # Recursive call on the left of pivot
+            self.task_quicksort(low, pi - 1)
 
-    def task_quicksort(self, low, high):
+            # Recursive call on the right of pivot
+            self.task_quicksort(pi + 1, high)
+
+    def partition(self, low, high):
         """Recursively performs quick sort on the due dates of the
         tasks in self.tasks"""
-        if low < high:
-            # Partitioning the list
-            pivot = self.tasks[high]
-            index = (low-1)
-            for j in range(low, high):
-                if self.tasks[j] < pivot:
-                    index += 1
-                    # Swapping self.tasks[index] and self.tasks[j]
-                    temp = self.tasks[index]
-                    self.tasks[index] = self.tasks[j]
-                    self.tasks[j] = temp
-            # Swapping self.tasks[index + 1] and self.tasks[high]
-            temp = self.tasks[index + 1]
-            self.tasks[index+1] = self.tasks[high]
-            self.tasks[high] = temp
-            # Recursive call to check both sides of the list
-            self.task_quicksort(low, index)
-            self.task_quicksort(index + 2, high)
+        pivot = self.tasks[high]
+
+        # pointer for greater element
+        i = low - 1
+
+        # traverse through all elements
+        # compare each element with pivot
+        for j in range(low, high):
+            if self.tasks[j] <= pivot:
+                # If element smaller than pivot is found
+                # swap it with the greater element pointed by i
+                i = i + 1
+
+                # Swapping element at i with element at j
+                (self.tasks[i], self.tasks[j]) = (self.tasks[j], self.tasks[i])
+
+        # Swap the pivot element with the greater element specified by i
+        (self.tasks[i + 1], self.tasks[high]) = (self.tasks[high], self.tasks[i + 1])
+
+        # Return the position from where partition is done
+        return i + 1
 
 
 
 # Testing basic implemetation of task manager
 if __name__ == "__main__":
     homework = TaskManager()
+    langAssign = Task("Language Homework", 2024, 2, 18, 5, 30, "PM")
     scienceAssign = Task("Science Homework", 2024, 2, 19, 3, 30, "PM")
-    compAssign = Task("Computer Homework", 2024, 2, 18, 3, 30, "PM")
+    compAssign = Task("Computer Homework", 2024, 2, 18, 4, 30, "PM")
     mathAssign = Task("Math Homework",2024, 2, 17, 3, 30, "PM")
+
 
     homework.add_task(scienceAssign)
     homework.add_task(compAssign)
     homework.add_task(mathAssign)
+    homework.add_task(langAssign)
 
-    homework.task_sort_time()
+    homework.print_tasks()
+    # partition
+    low = 0
+    high = len(homework) - 1
+    homework.task_quicksort(low, high)
     homework.print_tasks()
 
 
