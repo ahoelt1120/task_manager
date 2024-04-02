@@ -29,7 +29,7 @@ class TaskManager:
     def remove_task(self, name: str):
         """Removes a completed task from the tasklist"""
         for task in self.tasks:
-            if task.name == name:
+            if task.task_name == name:
                 self.tasks.remove(task)
 
     def change_task_date(self, name: str, year: int, month: int, day: int, hour: int, minute: int, am_or_pm: str):

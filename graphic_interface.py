@@ -115,11 +115,13 @@ def myClick():
 
     task_manager.add_task(new_task)
     # Updating task list
-    start_y = 350
+    start_y = 375
+    count = 1
     for task in task_manager.tasks:
-        new_label = Label(root, text=str(task), font=("Arial", 12, "bold"), fg="white")
+        new_label = Label(root, text=str(count) + ". " + str(task), font=("Arial", 12, "bold"), fg="white")
         new_label.place(x= 0, y = start_y, width=800, height = 30)
         start_y += 25
+        count += 1
 
 
 # The add task button that calls myClick()
@@ -130,7 +132,46 @@ myButton.place(x= 375, y = 250, width=80, height = 30)
 task_label = Label(root, text="Current Task List", font=("Arial", 23, "bold"), fg="white")
 task_label.place(x=150, y=300, width=500, height=50)
 
+def sortClick():
+    '''Checks that all blanks were filled before using the input to create a
+    task object and then printing each object in the todo list'''
 
+    low = 0
+    high = len(task_manager) - 1
+    task_manager.task_quicksort(low, high)
+    start_y = 375
+    count = 1
+    for task in task_manager.tasks:
+        new_label = Label(root, text=str(count) + ". " + str(task), font=("Arial", 12, "bold"), fg="white")
+        new_label.place(x= 0, y = start_y, width=800, height = 30)
+        start_y += 25
+        count += 1
+
+sortButton = Button(root, text="Sort tasks",command=sortClick)
+sortButton.place(x= 300, y = 345, width=80, height = 30)
+
+# Remove task entry box
+remove_taskname = Entry(root, width = 50)
+remove_taskname.place(x= 400, y = 345, width=50, height = 30)
+
+def remClick():
+    if len(task_manager.tasks) < int(remove_taskname.get()):
+        return
+    task_manager.remove_task(task_manager.tasks[int(remove_taskname.get())-1].task_name)
+    start_y = 375
+    count = 1
+    for task in task_manager.tasks:
+        new_label = Label(root, text=str(count) + ". " + str(task), font=("Arial", 12, "bold"), fg="white")
+        new_label.place(x=0, y=start_y, width=800, height=30)
+        start_y += 25
+        count += 1
+    new_label = Label(root, text=" ", font=("Arial", 12, "bold"), fg="white")
+    new_label.place(x=0, y=start_y, width=800, height=30)
+
+
+# Remove task button
+remButton = Button(root, text="Remove task",command=remClick)
+remButton.place(x= 455, y = 345, width=90, height = 30)
 
 
 
